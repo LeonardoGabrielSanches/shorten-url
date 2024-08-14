@@ -4,5 +4,6 @@ namespace UrlShortener.Domain.Repositories;
 
 public interface IUrlShortenerRepository
 {
-    Task<string> CreateShortUrlAsync(Url url);
+    Task CreateShortUrlAsync(Url url);
+    Task<bool> ExistsAsync(string code);
 }
