@@ -1,0 +1,6 @@
+﻿services:
+  urlshortner.api:
+    image: urlshortner.api
+    build:
+      context: .
+      dockerfile: src/UrlShortner.Api/Dockerfile
