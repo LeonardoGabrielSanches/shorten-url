@@ -46,7 +46,7 @@ public class CreateUrlShortenerTest
             .Setup(repo => repo.CreateShortUrlAsync(It.IsAny<Url>()));
 
         _urlShortenerRepositoryMock
-            .SetupSequence(repo => repo.ExistsAsync(It.IsAny<string>()))
+            .SetupSequence(repo => repo.ExistsByCodeAsync(It.IsAny<string>()))
             .ReturnsAsync(true)
             .ReturnsAsync(false);
 

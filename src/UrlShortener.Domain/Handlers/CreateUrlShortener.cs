@@ -32,7 +32,7 @@ public sealed class CreateUrlShortener(
 
         var code = CodeGenerator.GenerateRandomCode(Random.Shared.Next(5, 10));
 
-        while (await urlShortenerRepository.ExistsAsync(code))
+        while (await urlShortenerRepository.ExistsByCodeAsync(code))
             code = CodeGenerator.GenerateRandomCode(Random.Shared.Next(5, 10));
 
         var url = new Url(request.Url, code);
