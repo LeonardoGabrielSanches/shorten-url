@@ -1,4 +1,7 @@
-using Microsoft.AspNetCore.Http.Extensions;
+using UrlShortener.Api.Settings;
+using UrlShortener.Domain.Handlers;
+using UrlShortener.Domain.Repositories;
+using UrlShortener.Infra.Data.MongoDb.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,6 +10,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddScoped<IUrlShortenerRepository, MongoDbUrlRepository>();
+builder.Services.AddScoped<CreateUrlShortener>();
+builder.Services.AddScoped<GetOriginalUrlByCode>();
+
+builder.Services.Configure<MongoDbSettings>(builder.Configuration.GetSection("MongoDb"));
 
 var app = builder.Build();
 
@@ -19,31 +28,28 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
+app.MapPost("/shorten-url",
+        async (CreateUrlShortener.CreateUrlShortenerRequest request, CreateUrlShortener createUrlShortener) =>
+        {
+            var result = await createUrlShortener.Handle(request);
 
-app.MapGet("/weatherforecast", (HttpContext httpContext) =>
-    {
-        Console.WriteLine(httpContext.Request.Host);
+            return result.Success
+                ? Results.Ok(result.Data)
+                : Results.BadRequest(new { errors = result.ErrorMessages.ToList() });
+        })
+    .WithName("UrlShortener")
+    .WithOpenApi();
 
-        var forecast = Enumerable.Range(1, 5).Select(index =>
-                new WeatherForecast
-                (
-                    DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                    Random.Shared.Next(-20, 55),
-                    summaries[Random.Shared.Next(summaries.Length)]
-                ))
-            .ToArray();
-        return forecast;
-    })
-    .WithName("GetWeatherForecast")
+app.MapGet("/{code}",
+        async (string code, GetOriginalUrlByCode getOriginalUrlByCode) =>
+        {
+            var result = await getOriginalUrlByCode.Handle(new GetOriginalUrlByCode.GetOriginalUrlByCodeRequest(code));
+
+            return result.Success
+                ? Results.Redirect(result.Data?.Url ?? string.Empty)
+                : Results.NotFound();
+        })
+    .WithName("UrlShortenerByCode")
     .WithOpenApi();
 
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}

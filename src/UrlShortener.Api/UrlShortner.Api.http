@@ -1,6 +1,12 @@
-@UrlShortner.Api_HostAddress = http://localhost:5144
+@UrlShortner.Api_HostAddress = http://localhost:7251
 
-GET {{UrlShortner.Api_HostAddress}}/weatherforecast/
+POST {{UrlShortner.Api_HostAddress}}/shorten-url/
 Accept: application/json
+Content-Type: application/json
+
+{
+  "url": ""
+}
+
 
 ###

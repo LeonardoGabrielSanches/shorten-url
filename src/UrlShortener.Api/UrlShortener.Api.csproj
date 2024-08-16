@@ -6,6 +6,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <InvariantGlobalization>true</InvariantGlobalization>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+        <UserSecretsId>e03a68bf-c55b-44cd-9034-2e7ea906ee8f</UserSecretsId>
     </PropertyGroup>
 
     <ItemGroup>
@@ -17,6 +18,12 @@
       <Content Include="..\..\.dockerignore">
         <Link>.dockerignore</Link>
       </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\UrlShortener.Domain\UrlShortener.Domain.csproj" />
+      <ProjectReference Include="..\UrlShortener.Infra.CrossCutting\UrlShortener.Infra.CrossCutting.csproj" />
+      <ProjectReference Include="..\UrlShortener.Infra.Data\UrlShortener.Infra.Data.csproj" />
     </ItemGroup>
 
 </Project>

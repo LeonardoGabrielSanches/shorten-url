@@ -55,7 +55,7 @@ public class CreateUrlShortenerTest
 
         // Assert
         Assert.NotNull(response);
-        Assert.Contains("https://base-path.com/", response.Data?.ShortUrl);
+        Assert.Contains("https://base-path.com/", response.Data?.Url);
 
         _urlShortenerRepositoryMock.Verify(
             repository => repository.CreateShortUrlAsync(It.Is<Url>(u => u.OriginalUrl == request.Url)), Times.Once);

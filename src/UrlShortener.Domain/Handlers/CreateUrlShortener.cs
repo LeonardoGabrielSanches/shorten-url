@@ -15,13 +15,13 @@ public sealed class CreateUrlShortener(
     {
         public CreateUrlShortenerRequestValidator()
         {
-            RuleFor(x => x.Url).NotEmpty().WithMessage("Url must not be empty");
+            RuleFor(x => x.Url).NotEmpty().WithMessage("Url must not be empty.");
         }
     }
 
     public record CreateUrlShortenerRequest(string Url);
 
-    public record CreateUrlShortenerResponse(string ShortUrl);
+    public record CreateUrlShortenerResponse(string Url);
 
     public async Task<Result<CreateUrlShortenerResponse>> Handle(CreateUrlShortenerRequest request)
     {
@@ -41,6 +41,6 @@ public sealed class CreateUrlShortener(
 
         var shortUrl = $"https://{httpContextAccessor.HttpContext.Request.Host}/{url.Code}";
 
-        return new Result<CreateUrlShortenerResponse>(new CreateUrlShortenerResponse(ShortUrl: shortUrl));
+        return new Result<CreateUrlShortenerResponse>(new CreateUrlShortenerResponse(Url: shortUrl));
     }
 }
