@@ -1,9 +1,9 @@
 ﻿services:
-  #  urlshortner.api:
-  #    image: urlshortner.api
-  #    build:
-  #      context: .
-  #      dockerfile: src/UrlShortner.Api/Dockerfile
+  urlshortner.api:
+    image: urlshortner.api
+    build:
+      context: .
+      dockerfile: src/UrlShortner.Api/Dockerfile
   
   mongo:
     image: mongo
