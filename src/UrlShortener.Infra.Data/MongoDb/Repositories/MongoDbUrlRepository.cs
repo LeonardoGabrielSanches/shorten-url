@@ -9,7 +9,7 @@ namespace UrlShortener.Infra.Data.MongoDb.Repositories;
 
 public class MongoDbUrlRepository : IUrlShortenerRepository
 {
-    private const string COLLECTION_NAME = "urls";
+    public const string CollectionName = "urls";
     private readonly IMongoCollection<MongoDbUrl> _mongoUrlsCollection;
 
     public MongoDbUrlRepository(IOptions<MongoDbSettings> mongoSettings)
@@ -18,7 +18,7 @@ public class MongoDbUrlRepository : IUrlShortenerRepository
 
         var mongoDatabase = mongoClient.GetDatabase(mongoSettings.Value.Database);
 
-        _mongoUrlsCollection = mongoDatabase.GetCollection<MongoDbUrl>(COLLECTION_NAME);
+        _mongoUrlsCollection = mongoDatabase.GetCollection<MongoDbUrl>(CollectionName);
     }
 
     public async Task CreateShortUrlAsync(Url url)

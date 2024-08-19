@@ -18,6 +18,6 @@ public class Url(string originalUrl, string code)
     public string Id { get; private set; } = null!;
     public string Code { get; private set; } = code;
     public string OriginalUrl { get; private set; } = originalUrl;
-    public DateTime CreateAt { get; private set; } = DateTime.Now;
-    public DateTime ExpiresAt { get; private set; } = DateTime.Now.AddSeconds(120);
+    public DateTime CreateAt { get; private set; } = DateTime.UtcNow;
+    public DateTime ExpiresAt { get; private set; } = DateTime.UtcNow.AddSeconds(120);
 }
