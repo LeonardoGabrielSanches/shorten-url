@@ -1,14 +1,31 @@
 ﻿services:
   urlshortner.api:
-    image: urlshortner.api
+    image: urlshortener.api
+    depends_on:
+      - mongodb
+    ports:
+      - "8081:80"
     build:
       context: .
-      dockerfile: src/UrlShortner.Api/Dockerfile
+      dockerfile: src/UrlShortener.Api/Dockerfile
+    environment:
+      - MongoDb__ConnectionString=mongodb://admin:admin@localhost:27017
+      - MongoDb__Database=urlshortener_db
+      - ASPNETCORE_URLS=http://+:80
+    networks:
+      - urlshortener-net
   
-  mongo:
+  mongodb:
     image: mongo
     ports:
       - "27017:27017"
     environment:
       - MONGO_INITDB_ROOT_USERNAME=admin
       - MONGO_INITDB_ROOT_PASSWORD=admin
+    restart: always
+    networks:
+      - urlshortener-net
+      
+networks:
+  urlshortener-net:
+    driver: bridge
